@@ -20,7 +20,8 @@ class myUnet(object):
         mydata = dataProcess(self.img_rows, self.img_cols)
         imgs_train, imgs_mask_train = mydata.load_train_data()
         imgs_test = mydata.load_test_data()
-        return imgs_train, imgs_mask_train, imgs_test
+        imgs_val = mydata.load_val_data()
+        return imgs_train, imgs_mask_train, imgs_test, imgs_val
 
     def get_unet(self):
 
@@ -154,14 +155,18 @@ class myUnet(object):
     def train(self):
 
         print("loading data")
-        imgs_train, imgs_mask_train, imgs_test = self.load_data()
+        imgs_train, imgs_mask_train, imgs_test, imgs_val = self.load_data()
+        print('train data size =', imgs_train.shape)
+        print('val data size =', imgs_val.shape)
+        print('test data size =', imgs_val.shape)
+
         print("loading data done")
         model = self.get_unet()
         print("got unet")
 
         model_checkpoint = ModelCheckpoint('./results/unet.hdf5', monitor='loss',verbose=1, save_best_only=True)
         print('Fitting model...')
-        model.fit(imgs_train, imgs_mask_train, batch_size=4, epochs=10, verbose=1,validation_split=0.2, shuffle=True, callbacks=[model_checkpoint])
+        model.fit(imgs_train, imgs_mask_train, batch_size=4, epochs=10, verbose=1,validation_data=imgs_val, shuffle=True, callbacks=[model_checkpoint])
 
         print('predict test data')
         imgs_mask_test = model.predict(imgs_test, batch_size=1, verbose=1)

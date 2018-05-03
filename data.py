@@ -14,7 +14,8 @@ class myAugmentation(object):
     Finally, seperate augmentated image apart into train image and label
     """
 
-    def __init__(self, train_path="train", label_path="label", merge_path="merge", aug_merge_path="aug_merge", aug_train_path="aug_train", aug_label_path="aug_label", img_type="tif"):
+    def __init__(self, train_path="train", label_path="label", merge_path="merge", aug_merge_path="aug_merge",
+                 aug_train_path="aug_train", aug_label_path="aug_label", img_type="tif"):
 
         """
         Using glob to get all .img_type form path
@@ -135,7 +136,8 @@ class myAugmentation(object):
 
 class dataProcess(object):
 
-    def __init__(self, out_rows, out_cols, data_path = "/data/train/image", label_path = "/data/train/label", test_path = "/data/test", npy_path = "./results", img_type = "tif"):
+    def __init__(self, out_rows, out_cols, data_path = "/data/train/image", label_path = "/data/train/label",
+                 test_path = "/data/test", val_path="/data/val", npy_path = "./results", img_type = "tif"):
 
         """
 
@@ -147,6 +149,7 @@ class dataProcess(object):
         self.label_path = label_path
         self.img_type = img_type
         self.test_path = test_path
+        self.val_path = val_path
         self.npy_path = npy_path
 
     def create_train_data(self):
@@ -176,6 +179,35 @@ class dataProcess(object):
         print('loading done')
         np.save(self.npy_path + '/imgs_train.npy', imgdatas)
         np.save(self.npy_path + '/imgs_mask_train.npy', imglabels)
+        print('Saving to .npy files done.')
+
+    def create_val_data(self):
+        i = 0
+        print('-'*30)
+        print('Creating validation images...')
+        print('-'*30)
+        imgs = glob.glob(self.data_path+"/*."+self.img_type)
+        print(len(imgs))
+        imgdatas = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
+        imglabels = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
+        for imgname in imgs:
+            midname = imgname[imgname.rindex("/")+1:]
+            img = load_img(self.data_path + "/" + midname,grayscale = True)
+            label = load_img(self.label_path + "/" + midname,grayscale = True)
+            img = img_to_array(img)
+            label = img_to_array(label)
+            #img = cv2.imread(self.data_path + "/" + midname,cv2.IMREAD_GRAYSCALE)
+            #label = cv2.imread(self.label_path + "/" + midname,cv2.IMREAD_GRAYSCALE)
+            #img = np.array([img])
+            #label = np.array([label])
+            imgdatas[i] = img
+            imglabels[i] = label
+            if i % 100 == 0:
+                print('Done: {0}/{1} images'.format(i, len(imgs)))
+            i += 1
+        print('loading done')
+        np.save(self.npy_path + '/imgs_val.npy', imgdatas)
+        np.save(self.npy_path + '/imgs_mask_val.npy', imglabels)
         print('Saving to .npy files done.')
 
     def create_test_data(self):
@@ -214,6 +246,22 @@ class dataProcess(object):
         imgs_mask_train[imgs_mask_train <= 0.5] = 0
         return imgs_train,imgs_mask_train
 
+    def load_val_data(self):
+        print('-'*30)
+        print('load validation images...')
+        print('-'*30)
+        imgs_val = np.load(self.npy_path+"/imgs_val.npy")
+        imgs_mask_val = np.load(self.npy_path+"/imgs_mask_val.npy")
+        imgs_val = imgs_val.astype('float32')
+        imgs_mask_val = imgs_mask_val.astype('float32')
+        imgs_val /= 255
+        #mean = imgs_val.mean(axis = 0)
+        #imgs_val -= mean
+        imgs_mask_val /= 255
+        imgs_mask_val[imgs_mask_val > 0.5] = 1
+        imgs_mask_val[imgs_mask_val <= 0.5] = 0
+        return imgs_val,imgs_mask_val
+
     def load_test_data(self):
         print('-'*30)
         print('load test images...')
@@ -234,5 +282,6 @@ if __name__ == "__main__":
     mydata = dataProcess(512,512)
     mydata.create_train_data()
     mydata.create_test_data()
+    mydata.create_val_data()
     #imgs_train,imgs_mask_train = mydata.load_train_data()
     #print imgs_train.shape,imgs_mask_train.shape
