@@ -33,8 +33,8 @@ def merge_img():
 	imgdir.write_image(imgarr)
 
 if __name__ == "__main__":
-
-	merge_img()
+	split_img()
+	#merge_img()
 
 
 
