@@ -135,7 +135,7 @@ class myAugmentation(object):
 
 class dataProcess(object):
 
-    def __init__(self, out_rows, out_cols, data_path = "/data/train/image", label_path = "/data/train/label", test_path = "/data/test", npy_path = "/results/", img_type = "tif"):
+    def __init__(self, out_rows, out_cols, data_path = "/data/train/image", label_path = "/data/train/label", test_path = "/data/test", npy_path = "/results", img_type = "tif"):
 
         """
 
