@@ -156,9 +156,9 @@ class myUnet(object):
 
         print("loading data")
         imgs_train, imgs_mask_train, imgs_test, imgs_val = self.load_data()
-        print('train data size =', imgs_train)
-        print('val data size =', len(imgs_val))
-        print('test data size =', len(imgs_val))
+        print('train data size =', len(imgs_train))
+        print('val data size =', imgs_val)
+        print('test data size =', imgs_val)
 
         print("loading data done")
         model = self.get_unet()
