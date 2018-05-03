@@ -136,8 +136,8 @@ class myAugmentation(object):
 
 class dataProcess(object):
 
-    def __init__(self, out_rows, out_cols, data_path = "/data/train/image", label_path = "/data/train/label",
-                 test_path = "/data/test", val_path="/data/val", npy_path = "./results", img_type = "tif"):
+    def __init__(self, out_rows, out_cols, data_path = "./data/train/image", label_path = "./data/train/label",
+                 test_path = "./data/test", val_path="./data/val", npy_path = "./results", img_type = "tif"):
 
         """
 
@@ -158,7 +158,7 @@ class dataProcess(object):
         print('Creating training images...')
         print('-'*30)
         imgs = glob.glob(self.data_path+"/*."+self.img_type)
-        print(len(imgs))
+        print('debug data 161 len(imgs) =', len(imgs))
         imgdatas = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
         imglabels = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
         for imgname in imgs:
@@ -177,8 +177,8 @@ class dataProcess(object):
                 print('Done: {0}/{1} images'.format(i, len(imgs)))
             i += 1
         print('loading done')
-        np.save(self.npy_path + '/imgs_train.npy', imgdatas)
-        np.save(self.npy_path + '/imgs_mask_train.npy', imglabels)
+        np.save(self.npy_path + './imgs_train.npy', imgdatas)
+        np.save(self.npy_path + './imgs_mask_train.npy', imglabels)
         print('Saving to .npy files done.')
 
     def create_val_data(self):
@@ -206,8 +206,8 @@ class dataProcess(object):
                 print('Done: {0}/{1} images'.format(i, len(imgs)))
             i += 1
         print('loading done')
-        np.save(self.npy_path + '/imgs_val.npy', imgdatas)
-        np.save(self.npy_path + '/imgs_mask_val.npy', imglabels)
+        np.save(self.npy_path + './imgs_val.npy', imgdatas)
+        np.save(self.npy_path + './imgs_mask_val.npy', imglabels)
         print('Saving to .npy files done.')
 
     def create_test_data(self):
@@ -227,15 +227,15 @@ class dataProcess(object):
             imgdatas[i] = img
             i += 1
         print('loading done')
-        np.save(self.npy_path + '/imgs_test.npy', imgdatas)
+        np.save(self.npy_path + './imgs_test.npy', imgdatas)
         print('Saving to imgs_test.npy files done.')
 
     def load_train_data(self):
         print('-'*30)
         print('load train images...')
         print('-'*30)
-        imgs_train = np.load(self.npy_path+"/imgs_train.npy")
-        imgs_mask_train = np.load(self.npy_path+"/imgs_mask_train.npy")
+        imgs_train = np.load(self.npy_path+"./imgs_train.npy")
+        imgs_mask_train = np.load(self.npy_path+"./imgs_mask_train.npy")
         imgs_train = imgs_train.astype('float32')
         imgs_mask_train = imgs_mask_train.astype('float32')
         imgs_train /= 255
@@ -250,8 +250,8 @@ class dataProcess(object):
         print('-'*30)
         print('load validation images...')
         print('-'*30)
-        imgs_val = np.load(self.npy_path+"/imgs_val.npy")
-        imgs_mask_val = np.load(self.npy_path+"/imgs_mask_val.npy")
+        imgs_val = np.load(self.npy_path+"./imgs_val.npy")
+        imgs_mask_val = np.load(self.npy_path+"./imgs_mask_val.npy")
         imgs_val = imgs_val.astype('float32')
         imgs_mask_val = imgs_mask_val.astype('float32')
         imgs_val /= 255
@@ -266,7 +266,7 @@ class dataProcess(object):
         print('-'*30)
         print('load test images...')
         print('-'*30)
-        imgs_test = np.load(self.npy_path+"/imgs_test.npy")
+        imgs_test = np.load(self.npy_path+"./imgs_test.npy")
         imgs_test = imgs_test.astype('float32')
         imgs_test /= 255
         #mean = imgs_test.mean(axis = 0)
