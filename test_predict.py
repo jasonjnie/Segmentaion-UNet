@@ -9,7 +9,7 @@ myunet = myUnet()
 
 model = myunet.get_unet()
 
-model.load_weights('unet.hdf5')
+model.load_weights('./results/unet.hdf5')
 
 imgs_mask_test = model.predict(imgs_test, verbose=1)
 
