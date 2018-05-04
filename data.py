@@ -137,7 +137,8 @@ class myAugmentation(object):
 class dataProcess(object):
 
     def __init__(self, out_rows, out_cols, data_path = "./data/train/image", label_path = "./data/train/label",
-                 test_path = "./data/test", val_path="./data/val", npy_path = "./results", img_type = "tif"):
+                 test_path = "./data/test", val_data_path="./data/val/image", val_label_path = "./data/val/label" ,
+                 npy_path = "./results", img_type = "tif"):
 
         """
 
@@ -149,7 +150,8 @@ class dataProcess(object):
         self.label_path = label_path
         self.img_type = img_type
         self.test_path = test_path
-        self.val_path = val_path
+        self.val_data_path = val_data_path
+        self.val_label_path = val_label_path
         self.npy_path = npy_path
 
     def create_train_data(self):
@@ -186,14 +188,14 @@ class dataProcess(object):
         print('-'*30)
         print('Creating validation images...')
         print('-'*30)
-        imgs = glob.glob(self.data_path+"/*."+self.img_type)
+        imgs = glob.glob(self.val_data_path+"/*."+self.img_type)
         print(len(imgs))
         imgdatas = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
         imglabels = np.ndarray((len(imgs),self.out_rows,self.out_cols,1), dtype=np.uint8)
         for imgname in imgs:
             midname = imgname[imgname.rindex("/")+1:]
-            img = load_img(self.data_path + "/" + midname,grayscale = True)
-            label = load_img(self.label_path + "/" + midname,grayscale = True)
+            img = load_img(self.val_data_path + "/" + midname,grayscale = True)
+            label = load_img(self.val_label_path + "/" + midname,grayscale = True)
             img = img_to_array(img)
             label = img_to_array(label)
             #img = cv2.imread(self.data_path + "/" + midname,cv2.IMREAD_GRAYSCALE)
