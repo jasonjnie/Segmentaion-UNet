@@ -173,7 +173,7 @@ class dataProcess(object):
             #label = np.array([label])
             imgdatas[i] = img
             imglabels[i] = label
-            if i % 100 == 0:
+            if i % 1 == 0:
                 print('Done: {0}/{1} images'.format(i, len(imgs)))
             i += 1
         print('loading done')
@@ -234,8 +234,8 @@ class dataProcess(object):
         print('-'*30)
         print('load train images...')
         print('-'*30)
-        imgs_train = np.load(self.npy_path+"./imgs_train.npy")
-        imgs_mask_train = np.load(self.npy_path+"./imgs_mask_train.npy")
+        imgs_train = np.load(self.npy_path+"/imgs_train.npy")
+        imgs_mask_train = np.load(self.npy_path+"/imgs_mask_train.npy")
         imgs_train = imgs_train.astype('float32')
         imgs_mask_train = imgs_mask_train.astype('float32')
         imgs_train /= 255
@@ -285,3 +285,15 @@ if __name__ == "__main__":
     mydata.create_val_data()
     #imgs_train,imgs_mask_train = mydata.load_train_data()
     #print imgs_train.shape,imgs_mask_train.shape
+
+    '''
+    imgs_train, imgs_mask_train = mydata.load_train_data()
+    imgs_test = mydata.load_test_data()
+    imgs_val, imgs_mask_val = mydata.load_val_data()
+
+    print(imgs_train.shape)
+    print(imgs_mask_train.shape)
+    print(imgs_test.shape)
+    print(imgs_val.shape)
+    print(imgs_mask_val.shape)
+    '''
