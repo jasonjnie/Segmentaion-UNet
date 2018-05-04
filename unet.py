@@ -7,6 +7,7 @@ from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 from data import *
+from keras.preprocessing.image import array_to_img
 
 class myUnet(object):
 
@@ -159,14 +160,16 @@ class myUnet(object):
         print('train data size =', imgs_train.shape)
         print('val data size =', imgs_test.shape)
         print('test data size =', imgs_val.shape)
+        print('163:', imgs_train[0].max(), imgs_train[0].min())
+        print('164:', imgs_test[0].max(), imgs_test[0].min())
 
         print("loading data done")
         model = self.get_unet()
         print("got unet")
 
-        model_checkpoint = ModelCheckpoint('./results/unet.hdf5', monitor='loss',verbose=1, save_best_only=True)
+        model_checkpoint = ModelCheckpoint('./results/unet.hdf5', monitor='loss', verbose=1, save_best_only=True)
         print('Fitting model...')
-        model.fit(imgs_train, imgs_mask_train, batch_size=5, epochs=10, verbose=1,validation_split=0.2, shuffle=True, callbacks=[model_checkpoint])
+        model.fit(imgs_train, imgs_mask_train, batch_size=5, epochs=10, verbose=1, validation_split=0.2, shuffle=True, callbacks=[model_checkpoint])
 
         print('predict test data')
         imgs_mask_test = model.predict(imgs_test, batch_size=1, verbose=1)
@@ -178,21 +181,15 @@ class myUnet(object):
         imgs = np.load('./results/imgs_mask_test.npy')
         for i in range(imgs.shape[0]):
             img = imgs[i]
+            print('184:', img.max(), img.min())
             img = array_to_img(img)
             img.save("./results/%d.jpg"%(i))
-
-
 
 
 if __name__ == '__main__':
     myunet = myUnet()
     myunet.train()
     myunet.save_img()
-
-
-
-
-
 
 
 
