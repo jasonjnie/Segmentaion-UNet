@@ -204,7 +204,7 @@ class dataProcess(object):
             #label = np.array([label])
             imgdatas[i] = img
             imglabels[i] = label
-            if i % 100 == 0:
+            if i % 1 == 0:
                 print('Done: {0}/{1} images'.format(i, len(imgs)))
             i += 1
         print('loading done')
