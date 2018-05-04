@@ -11,6 +11,6 @@ model = myunet.get_unet()
 
 model.load_weights('./results/unet.hdf5')
 
-imgs_mask_test = model.predict(imgs_test, verbose=1)
+imgs_mask_test = model.predict(imgs_test, batch_size=5, verbose=1)
 
 np.save('./results/imgs_mask_test.npy', imgs_mask_test)
